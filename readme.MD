@@ -1,7 +1,7 @@
 * Microservices Architecture with AWS and Docker
 
        * Project Overview
-       
+
 This project consists of two microservices:
 
 Patient Service
@@ -13,7 +13,10 @@ Patient Service: Handles patient-related requests.
 Appointment Service: Manages appointment scheduling.
 Both services are deployed as Docker containers on ECS Fargate.
 ALB: Routes traffic to the appropriate service based on the URL path (/patients for Patient Service, /appointments for Appointment Service).
+
+
 1. Setup Overview
+
 VPC (Virtual Private Cloud)
 Created a custom VPC with public and private subnets in multiple Availability Zones.
 Public Subnets: Used for the ALB.
@@ -29,6 +32,7 @@ ECS uses Docker images stored in ECR (Elastic Container Registry).
 The ECS services are connected to the target groups through an ALB.
 Terraform Infrastructure Code
 Terraform automates the entire infrastructure creation, including VPC, ALB, ECS, ECR, and IAM roles.
+
 2. Resources and Configuration Details
 Terraform Configuration
 The infrastructure is described using Terraform. The main resources used include:
@@ -43,6 +47,8 @@ Service Communication
 Patient Service is accessible at /patients path and is handled by the patient-target-group.
 Appointment Service is accessible at /appointments path and is handled by the appointment-target-group.
 The ALB listens for HTTP requests and forwards them to the appropriate service.
+
+
 3. Docker Setup
 Dockerfile for Patient Service
 Dockerfile
@@ -92,6 +98,8 @@ To push Docker images to ECR:
 Authenticate to ECR: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com
 Tag Image: docker tag patient-service:latest <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/patient-service-repo:latest
 Push Image: docker push <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/patient-service-repo:latest
+
+
 4. ECS Deployment and ALB Configuration
 ECS Service Setup
 Patient Service ECS: Uses a task definition to launch a Docker container that exposes port 3000.
@@ -104,6 +112,7 @@ Security Group and Networking
 ECS tasks are placed in private subnets with a security group that allows incoming traffic from the ALB.
 The ALB has a security group allowing HTTP traffic from the internet.
 ECS Security Group: Allows inbound traffic only from the ALB.
+
 5. Accessing the Microservices
 After the infrastructure is deployed and the services are running, you can access them via the ALB’s DNS URL:
 
@@ -115,6 +124,7 @@ To find the ALB DNS name:
 Go to the AWS Management Console.
 Navigate to EC2 > Load Balancers.
 Find your ALB and note down its DNS name (e.g., app-alb-1234567890.us-east-1.elb.amazonaws.com).
+
 6. CI/CD with GitHub Actions
 The application can be integrated with GitHub Actions to automate deployments.
 
@@ -163,6 +173,8 @@ jobs:
         run: |
           ecs-cli configure --region us-east-1 --access-key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret-key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           ecs-cli compose --file docker-compose.yml --project-name patient-service up
+
+          
 7. Conclusion
 This setup demonstrates a complete microservices architecture with AWS, Docker, ECS, ALB, and CI/CD. Using Terraform for infrastructure as code, Docker for containerization, and ECS for scalable application hosting, this solution is designed for high availability and ease of scaling.
 
