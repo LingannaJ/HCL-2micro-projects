@@ -1,5 +1,5 @@
-Microservices Architecture with AWS and Docker
-Project Overview
+* Microservices Architecture with AWS and Docker
+       * Project Overview
 This project consists of two microservices:
 
 Patient Service
