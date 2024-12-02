@@ -164,6 +164,23 @@ resource "aws_lb_listener_rule" "appointment_listener_rule" {
   }
 }
 
+# Listener Rule for Patient Service
+resource "aws_lb_listener_rule" "patient_listener_rule" {
+  listener_arn = aws_lb_listener.app_listener.arn
+  priority     = 20 # Unique priority for patient listener rule
+
+  condition {
+    path_pattern {
+      values = ["/patients/*", "/patients"]
+    }
+  }
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.patient_target_group.arn
+  }
+}
+
 # ECS Service for Patient Service
 resource "aws_ecs_service" "patient_service" {
   name            = "patient-service"
