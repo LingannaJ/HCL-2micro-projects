@@ -228,7 +228,7 @@ resource "aws_ecs_task_definition" "patient_service" {
 
   container_definitions = jsonencode([{
     name        = "patient-service-container"
-    image       = "767397768520.dkr.ecr.us-east-1.amazonaws.com/patient-service:latest"
+    image       = "767397768520.dkr.ecr.us-east-1.amazonaws.com/patient-service-repo:latest"
     cpu         = 256
     memory      = 512
     portMappings = [
@@ -250,7 +250,7 @@ resource "aws_ecs_task_definition" "appointment_service" {
 
   container_definitions = jsonencode([{
     name        = "appointment-service-container"
-    image       = "767397768520.dkr.ecr.us-east-1.amazonaws.com/appointment-service:latest"
+    image       = "767397768520.dkr.ecr.us-east-1.amazonaws.com/appointment-service-repo:latest"
     cpu         = 256
     memory      = 512
     portMappings = [
